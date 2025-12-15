@@ -1,4 +1,4 @@
-FROM node:18-slim
+FROM node:20-slim
 
 # Install Python 3, pip, and ffmpeg (just in case we need it later)
 # We also install 'curl' to help with some yt-dlp internal requests if needed
