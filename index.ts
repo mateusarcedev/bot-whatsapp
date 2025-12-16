@@ -23,6 +23,8 @@ import * as mime from 'mime-types';
 
 dotenv.config();
 
+const PORT = process.env.PORT || 3000;
+
 // Directory to store auth state - essential for persistent login
 const AUTH_DIR = 'auth_info_baileys';
 const TEMP_DIR = 'temp_downloads';
@@ -335,9 +337,19 @@ async function handleDownload(url: string, format: 'video' | 'audio', remoteJid:
 }
 
 // Handle graceful shutdown (Ctrl+C)
+// Handle graceful shutdown (Ctrl+C)
 process.on('SIGINT', () => {
   console.log('Encerrando bot...');
   process.exit(0);
+});
+
+import http from 'http';
+// Basic HTTP server for Heroku
+http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end('Atlas Bot Online');
+}).listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
 
 connectToWhatsApp().catch(err => console.log('Unexpected error:', err));
