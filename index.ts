@@ -68,7 +68,7 @@ async function connectToWhatsApp() {
 
   const sock = makeWASocket({
     logger: pino({ level: 'silent' }), // Hide debug logs
-    printQRInTerminal: true,
+    printQRInTerminal: false,
     auth: state,
     connectTimeoutMs: 60000,
     defaultQueryTimeoutMs: 60000,
