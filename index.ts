@@ -12,6 +12,7 @@ import { Boom } from '@hapi/boom';
 import pino from 'pino';
 import * as qrcode from 'qrcode-terminal';
 import fs from 'fs';
+import { useSupabaseAuthState } from './auth_supabase';
 import path from 'path';
 import { downloadMedia } from './download';
 import { createClient } from '@supabase/supabase-js';
@@ -62,13 +63,12 @@ cron.schedule('*/30 * * * *', () => {
 });
 
 async function connectToWhatsApp() {
-  const { state, saveCreds } = await useMultiFileAuthState(AUTH_DIR);
-  const { version } = await fetchLatestBaileysVersion();
+  // Use Supabase Auth for persistent session (Heroku compatible)
+  const { state, saveCreds } = await useSupabaseAuthState(supabase);
 
   const sock = makeWASocket({
-    version,
-    logger: pino({ level: 'silent' }) as any,
-    printQRInTerminal: false,
+    logger: pino({ level: 'silent' }), // Hide debug logs
+    printQRInTerminal: true,
     auth: state,
     connectTimeoutMs: 60000,
     defaultQueryTimeoutMs: 60000,
